@@ -16,7 +16,8 @@ class MyExtension extends AbstractExtension
     {
         return [
             new TwigFilter('hashString', [$this, 'hashString']),
-            new TwigFilter('myReplace', [$this, 'myReplace'])
+            new TwigFilter('myReplace', [$this, 'myReplace']),
+            new TwigFilter('getAssetUrl', [$this, 'getAssetUrl'])
         ];
     }
 
@@ -28,5 +29,14 @@ class MyExtension extends AbstractExtension
     public function myReplace(string $string, string $search, string $replace): string
     {
         return str_replace($search, $replace, $string);
+    }
+
+    public function getAssetUrl(): string
+    {
+        if ($_ENV['ENV'] == "prod") {
+            return '/';
+        }
+
+        return 'http://localhost:3000/';
     }
 }
