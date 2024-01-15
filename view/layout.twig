@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+	{% set assetUrl = '' | getAssetUrl %}
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>{% block title %}Annuaire des société{% endblock %}</title>
 	{% block stylesheets %}
-		<link rel="stylesheet" href="/assets/style.css" >
+		<link rel="stylesheet" href="{{ assetUrl }}assets/style.css" >
 	{% endblock %}
 </head>
 
@@ -26,7 +27,7 @@
 </div>
 
 {% block scripts %}
-	<script src="/assets/script.js"></script>
+	<script src="{{ assetUrl }}assets/script.js"></script>
 {% endblock %}
 </body>
 </html>
