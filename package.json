@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "dev": "vite --host",
+    "build": "vite build --emptyOutDir"
+  },
+  "dependencies": {
+    "vite": "^5.0.11"
+  }
+}
