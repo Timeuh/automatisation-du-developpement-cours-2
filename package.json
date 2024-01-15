@@ -1,7 +1,23 @@
 {
+  "name": "automatisation-du-developpement-cours-2",
+  "version": "1.0.0",
+  "description": "Ce projet est un petit annuaire d'entreprises.   Il permet de lister plusieurs entreprises, et d'en voir leur bureaux et employées.",
+  "main": "index.js",
   "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "start": "node index.js",
     "dev": "vite --host",
     "build": "vite build --emptyOutDir"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^8.56.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.29.1"
   },
   "dependencies": {
     "vite": "^5.0.11"
