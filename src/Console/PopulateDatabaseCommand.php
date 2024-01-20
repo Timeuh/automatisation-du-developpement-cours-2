@@ -2,10 +2,8 @@
 
 namespace App\Console;
 
-use App\Models\Company;
-use App\Models\Employee;
-use App\Models\Office;
-use Illuminate\Support\Facades\Schema;
+use Faker;
+use Illuminate\Support\Carbon;
 use Slim\App;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -29,6 +27,9 @@ class PopulateDatabaseCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output ): int
     {
+        //faker qui exclue le caractère '
+        $faker = Faker\Factory::create('fr_FR');
+
         $output->writeln('Populate database...');
 
         /** @var \Illuminate\Database\Capsule\Manager $db */
@@ -40,29 +41,81 @@ class PopulateDatabaseCommand extends Command
         $db->getConnection()->statement("TRUNCATE `companies`");
         $db->getConnection()->statement("SET FOREIGN_KEY_CHECKS=1");
 
+//creation de 2 entreprises
+        $companiesData = [];
+        for ($i = 1; $i <= 2; $i++) {
+            $companyName = $faker->company;
+            $phoneNumber = $faker->phoneNumber;
+            $email = "contact@$companyName.com";
+            $website = "https://$companyName.com/";
+            $imageUrl = $faker->imageUrl;
 
-        $db->getConnection()->statement("INSERT INTO `companies` VALUES
-    (1,'Stack Exchange','0601010101','stack@exchange.com','https://stackexchange.com/','https://i.stack.imgur.com/UPdHB.jpg', now(), now(), null),
-    (2,'Google','0602020202','contact@google.com','https://www.google.com','https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Google_office_%284135991953%29.jpg/800px-Google_office_%284135991953%29.jpg?20190722090506',now(), now(), null)
-        ");
+            $companiesData[] = [
+                'id' => $i,
+                'name' => $companyName,
+                'phone' => $phoneNumber,
+                'email' => $email,
+                'website' => $website,
+                'image' => $imageUrl,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+                'head_office_id' => null,
+            ];
+        }
 
-        $db->getConnection()->statement("INSERT INTO `offices` VALUES
-    (1,'Bureau de Nancy','1 rue Stanistlas','Nancy','54000','France','nancy@stackexchange.com',NULL,1, now(), now()),
-    (2,'Burea de Vandoeuvre','46 avenue Jeanne d\'Arc','Vandoeuvre','54500','France',NULL,NULL,1, now(), now()),
-    (3,'Siege sociale','2 rue de la primatiale','Paris','75000','France',NULL,NULL,2, now(), now()),
-    (4,'Bureau Berlinois','192 avenue central','Berlin','12277','Allemagne',NULL,NULL,2, now(), now())
-        ");
+//insertion des données dans la table companies
+        $db->getConnection()->table('companies')->insert($companiesData);
 
-        $db->getConnection()->statement("INSERT INTO `employees` VALUES
-     (1,'Camille','La Chenille',1,'camille.la@chenille.com',NULL,'Ingénieur', now(), now()),
-     (2,'Albert','Mudhat',2,'albert.mudhat@aqume.net',NULL,'Superviseur', now(), now()),
-     (3,'Sylvie','Tesse',3,'sylive.tesse@factice.local',NULL,'PDG', now(), now()),
-     (4,'John','Doe',4,'john.doe@generique.org',NULL,'Testeur', now(), now()),
-     (5,'Jean','Bon',1,'jean@test.com',NULL,'Developpeur', now(), now()),
-     (6,'Anais','Dufour',2,'anais@aqume.net',NULL,'DBA', now(), now()),
-     (7,'Sylvain','Poirson',3,'sylvain@factice.local',NULL,'Administrateur réseau', now(), now()),
-     (8,'Telma','Thiriet',4,'telma@generique.org',NULL,'Juriste', now(), now())
-        ");
+//creation de 4 bureaux
+        $officesData = [];
+        for ($i = 1; $i <= 4; $i++) {
+            ${"c$i"} = $faker->city;
+            $streetName = $faker->streetName;
+            $postcode = $faker->postcode;
+            $country = $faker->country;
+            $email = $faker->email;
+
+            $officesData[] = [
+                'id' => $i,
+                'name' => "Bureau de {${"c$i"}}",
+                'address' => $streetName,
+                'city' => ${"c$i"},
+                'zip_code' => $postcode,
+                'country' => $country,
+                'email' => $email,
+                'phone' => null,
+                'company_id' => 1,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ];
+        }
+//insertion des données dans la table offices
+        $db->getConnection()->table('offices')->insert($officesData);
+
+//creation des employés
+        $employeesData = [];
+        for ($i = 1; $i <= 8; $i++) {
+            $firstName = $faker->firstName;
+            $lastName = $faker->lastName;
+            $email = $faker->email;
+            $phoneNumber = $faker->phoneNumber;
+            $jobTitle = $faker->unique()->jobTitle;
+
+            $employeesData[] = [
+                'id' => $i,
+                'first_name' => $firstName,
+                'last_name' => $lastName,
+                'office_id' => $i % 4 + 1,
+                'email' => $email,
+                'phone' => $phoneNumber,
+                'job_title' => $jobTitle,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ];
+        }
+//insertion des données dans la table employees
+        $db->getConnection()->table('employees')->insert($employeesData);
+
 
         $db->getConnection()->statement("update companies set head_office_id = 1 where id = 1;");
         $db->getConnection()->statement("update companies set head_office_id = 3 where id = 2;");
