@@ -27,7 +27,6 @@ class PopulateDatabaseCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output ): int
     {
-        //faker qui exclue le caractère '
         $faker = Faker\Factory::create('fr_FR');
 
         $output->writeln('Populate database...');
