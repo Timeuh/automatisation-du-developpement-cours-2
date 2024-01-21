@@ -5,6 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * App\Models\Employee.
+ * @property string $last_name
+ * @property string $first_name
+ */
 class Employee extends Model
 {
     protected $table = 'employees';
