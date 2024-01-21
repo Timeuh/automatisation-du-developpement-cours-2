@@ -9,10 +9,10 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class CompanyController extends DefaultController
 {
-    public function index(ServerRequestInterface $request, ResponseInterface $response, $args): ResponseInterface
+    public function index(ServerRequestInterface $request, ResponseInterface $response, mixed $args): ResponseInterface
     {
         $company = Company::find($args['id']);
-        if ($company === null) {
+        if ($company == null) {
             throw new HttpNotFoundException($request);
         }
 

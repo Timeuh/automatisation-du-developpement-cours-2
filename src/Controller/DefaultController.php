@@ -8,7 +8,7 @@ use Slim\Views\Twig;
 class DefaultController
 {
     // Get twig from container
-    protected $twig;
+    protected mixed $twig;
 
     public function __construct(App $app)
     {

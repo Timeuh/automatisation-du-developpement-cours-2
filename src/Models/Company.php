@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * @method static find($id)
+ * @property int $id
+ * @property Office $headOffice
  */
 class Company extends Model
 {
